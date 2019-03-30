@@ -2,6 +2,7 @@ from datetime import datetime as dt
 import os
 from shutil import copyfile
 
+
 class Customer:
     first_name = ''
     last_name = ''
@@ -46,14 +47,19 @@ class FileManager:
     hydro_massage_db = None
     new_entries_db = None
     
+    '''
+    On init, pass in the paths of the files to manipulate. Since there are only two files, two
+    arguments are required.
+    '''
     def __init__(self, db_path, new_entry_path):
         self.db_path = db_path
         self.new_entry_path = new_entry_path
-#         try:
-#             self.read_databases()
-#         except BaseException as e:
-#             print("Error reading the database:", e)
-        
+
+    '''
+    Read the hydromassage database, and also the datatrack CSV, and store the hydromassage entries in a CSV.
+    During this process, check for malformed or absent phone numbers and catch errors from these number, displaying them
+    to the user. For valid new entries which can be added, add them to the list of customers to add.
+    '''
     def read_databases(self):
         self.hydro_massage_db = open(self.db_path, 'r+', encoding='latin-1')
         self.new_entries_db = open(self.new_entry_path, 'r')
@@ -74,31 +80,39 @@ class FileManager:
             try:
                self.customers_to_add.append(Customer(values[5], values[4], values[8]))
             except ValueError as e:
-                print("Could not add", values[5].replace('"', ''), values[4].replace('"', ''), "agreement", '#' + values[1].replace('"', '') + '.', e)
+                print("Could not add", values[5].replace('"', ''), values[4].replace('"', ''), "agreement number", '#' + values[1].replace('"', '') + '.', e)
         
     ''' 
     Checks if a customer exists in the current hydromassage database. If they don't
     then add them. If they do, print a message saying that they were already added.
+    This function will automatically backup the hydromassage log to <hydromassage_database_name>.bac, 
+    just in case there is an error with this program.
     '''
 
     def write_new_customers(self):
         copyfile(self.db_path, self.db_path + '.bac')
         if len(self.customers_to_add) > 0:
             for customer in self.customers_to_add:
+                # print(customer)
                 if (customer.phone_number in self.customer_dictionary):
                     print("The number for", customer, "is already added to the HydroMassage as", self.customer_dictionary[customer.phone_number])
                 else:
                     date = dt.now().strftime('%m/%d/%Y')
-                    self.hydro_massage_db.write("%s,10,,Enabled,Recurring,no,no,%s,,%s,%s,,NONE,NONE,NONE,10,%s,No Usage,No Usage,No Usage,No Usage,yes,NONE,NONE,0,10,0,0," % (customer.phone_number, date, customer.last_name, customer.first_name, date))
-                    #print("%s,10,,Enabled,Recurring,no,no,%s,,%s,%s,,NONE,NONE,NONE,10,%s,No Usage,No Usage,No Usage,No Usage,yes,NONE,NONE,0,10,0,0," % (customer.phone_number, date, customer.last_name, customer.first_name, date))
+                    self.hydro_massage_db.write("%s,10,,Enabled,Recurring,no,no,%s,,%s,%s,,NONE,NONE,NONE,10,%s,No Usage,No Usage,No Usage,No Usage,yes,NONE,NONE,0,10,0,0,\r\n" % (customer.phone_number, date, customer.last_name, customer.first_name, date))
+                    print("Adding: ", customer)
     
     ''' 
     Close up the open databases.
     '''
+
     def close_files(self):
         self.hydro_massage_db.close()
         self.new_entries_db.close();
-        
+
+    ''' 
+    Delete the CSV from datatrack, since it's not needed. 
+    '''  
+
     def delete_new_entries_CSV(self):
         os.remove(self.new_entry_path)
         
@@ -132,5 +146,6 @@ class InputManager:
             
         print("Press any key to exit.")
         input()
+
         
 inputmanager = InputManager();
