@@ -90,13 +90,16 @@ class FileManager:
     '''
 
     def write_new_customers(self):
+        # To ensure no data is lost, always backup the database before writing to it.
         copyfile(self.db_path, self.db_path + '.bac')
+        # Only try to write if there are customers to add.
         if len(self.customers_to_add) > 0:
             for customer in self.customers_to_add:
-                # print(customer)
+                # Depending on if the customer's number is in the database, inform the user.
                 if (customer.phone_number in self.customer_dictionary):
                     print("The number for", customer, "is already added to the HydroMassage as", self.customer_dictionary[customer.phone_number])
                 else:
+                    # This gets the correct date to write to the database.
                     date = dt.now().strftime('%m/%d/%Y')
                     self.hydro_massage_db.write("%s,10,,Enabled,Recurring,no,no,%s,,%s,%s,,NONE,NONE,NONE,10,%s,No Usage,No Usage,No Usage,No Usage,yes,NONE,NONE,0,10,0,0,\r\n" % (customer.phone_number, date, customer.last_name, customer.first_name, date))
                     print("Adding: ", customer)
@@ -124,13 +127,18 @@ class InputManager:
     new_entry_path = '_.csv'
     
     def __init__(self):
-        print("Now reading the HydroMassage database from %s, and the new entry HydroMassage Log from %s" % (self.database_path, self.new_entry_path))
+        print(''' Usage: Export the datatrack hydromassage log as a CSV to the same location as this file (probably the desktop).
+        Then, run this file! The hydromassage should automatically be populated with entries!\n''')
+        
+        print("Now reading the HydroMassage database from %s, and the new entry HydroMassage Log from %s\n" % (self.database_path, self.new_entry_path))
         file_manager = FileManager(self.database_path, self.new_entry_path)
+        # Read the database, catching in fileIO errors.
         try:
             file_manager.read_databases()
         except BaseException as e:
             print("Error:", e)
             return
+        # Write the database, catching in IOErrors, or errors backing up the file.
         try:    
             file_manager.write_new_customers()
         except BaseException as e:
@@ -138,14 +146,16 @@ class InputManager:
             
         file_manager.close_files();
         
+        # The CSV file isn't needed any longer, so let the user delete it right from here.
         print("Do you want to delete the CSV file %s? (y/n)" % (self.new_entry_path))
         response = input().lower();
         if (response == 'y'):
             file_manager.delete_new_entries_CSV()
             print("File Deleted.")
+        else:
+            print("File not Deleted.")
             
         print("Press any key to exit.")
         input()
-
         
 inputmanager = InputManager();
