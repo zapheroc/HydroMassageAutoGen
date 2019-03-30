@@ -1,5 +1,6 @@
 from datetime import datetime as dt
 import os
+from shutil import copyfile
 
 class Customer:
     first_name = ''
@@ -48,7 +49,6 @@ class FileManager:
     def __init__(self, db_path, new_entry_path):
         self.db_path = db_path
         self.new_entry_path = new_entry_path
-        
 #         try:
 #             self.read_databases()
 #         except BaseException as e:
@@ -82,6 +82,7 @@ class FileManager:
     '''
 
     def write_new_customers(self):
+        copyfile(self.db_path, self.db_path + '.bac')
         if len(self.customers_to_add) > 0:
             for customer in self.customers_to_add:
                 if (customer.phone_number in self.customer_dictionary):
@@ -104,7 +105,7 @@ class FileManager:
 
 class InputManager:
     
-    # new_entry_path = '//Hydromassage1/aqtsdb/DB/CustomerDatabase.txt'
+    # database_path = '//Hydromassage1/aqtsdb/DB/CustomerDatabase.txt'
     database_path = 'CustomerDatabase.txt'
     new_entry_path = '_.csv'
     
@@ -116,9 +117,11 @@ class InputManager:
         except BaseException as e:
             print("Error:", e)
             return
+        try:    
+            file_manager.write_new_customers()
+        except BaseException as e:
+            print(e)
             
-        file_manager.write_new_customers()
-        
         file_manager.close_files();
         
         print("Do you want to delete the CSV file %s? (y/n)" % (self.new_entry_path))
