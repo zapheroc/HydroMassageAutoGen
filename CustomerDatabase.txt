@@ -1765,3 +1765,4 @@
 8925672,10,,Enabled,Recurring,no,no,03/04/2019,,Majarucon,Jon,,NONE,NONE,NONE,10,03/04/2019,No Usage,No Usage,No Usage,No Usage,yes,NONE,NONE,0,10,0,0,
 4488615,0,,Enabled,Recurring,no,no,03/04/2019,,Harvey,Shawn,,NONE,NONE,NONE,10,03/05/2019,10,1,10,No Usage,yes,NONE,NONE,0,10,0,0,
 6985775,10,,Enabled,Recurring,no,no,03/05/2019,,Lopez,Alexis,,NONE,NONE,NONE,10,03/05/2019,No Usage,No Usage,No Usage,No Usage,yes,NONE,NONE,0,10,0,0,
+7443378,10,,Enabled,Recurring,no,no,03/30/2019,,Zulick,Lindsay,,NONE,NONE,NONE,10,03/30/2019,No Usage,No Usage,No Usage,No Usage,yes,NONE,NONE,0,10,0,0,
