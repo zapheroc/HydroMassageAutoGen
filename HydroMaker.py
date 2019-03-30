@@ -70,7 +70,8 @@ class FileManager:
             values = line.split(',')
             # print(values[0], values[9], values[10])
             try:
-               self.customer_dictionary[values[0]] = Customer(values[10], values[9], values[0])
+                #print('hi')
+                self.customer_dictionary[values[0]] = Customer(values[10], values[9], values[0])
             except ValueError as e:
                 continue
                 # print("In the database, there is an aberrant phone number for", values[10],values[9], "the number is:", values[0])
@@ -78,7 +79,8 @@ class FileManager:
         for i in range(1, len(dbnew)):
             values = dbnew[-i].split(',')
             try:
-               self.customers_to_add.append(Customer(values[5], values[4], values[8]))
+                #print('hi')
+                self.customers_to_add.append(Customer(values[5], values[4], values[8]))
             except ValueError as e:
                 print("Could not add", values[5].replace('"', ''), values[4].replace('"', ''), "agreement number", '#' + values[1].replace('"', '') + '.', e)
         
@@ -101,7 +103,7 @@ class FileManager:
                 else:
                     # This gets the correct date to write to the database.
                     date = dt.now().strftime('%m/%d/%Y')
-                    self.hydro_massage_db.write("%s,10,,Enabled,Recurring,no,no,%s,,%s,%s,,NONE,NONE,NONE,10,%s,No Usage,No Usage,No Usage,No Usage,yes,NONE,NONE,0,10,0,0,\r\n" % (customer.phone_number, date, customer.last_name, customer.first_name, date))
+                    self.hydro_massage_db.write("%s,10,,Enabled,Recurring,no,no,%s,,%s,%s,,NONE,NONE,NONE,10,%s,No Usage,No Usage,No Usage,No Usage,yes,NONE,NONE,0,10,0,0,\n" % (customer.phone_number, date, customer.last_name, customer.first_name, date))
                     print("Adding: ", customer)
     
     ''' 
@@ -122,8 +124,8 @@ class FileManager:
 
 class InputManager:
     
-    # database_path = '//Hydromassage1/aqtsdb/DB/CustomerDatabase.txt'
-    database_path = 'CustomerDatabase.txt'
+    database_path = '//Hydromassage1/aqtsdb/DB/CustomerDatabase.txt'
+    #database_path = 'CustomerDatabase.txt'
     new_entry_path = '_.csv'
     
     def __init__(self):
