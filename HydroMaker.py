@@ -139,6 +139,7 @@ class InputManager:
             file_manager.read_databases()
         except BaseException as e:
             print("Error:", e)
+            input()
             return
         # Write the database, catching in IOErrors, or errors backing up the file.
         try:    
