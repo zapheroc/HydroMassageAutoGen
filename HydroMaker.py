@@ -129,7 +129,7 @@ class InputManager:
     new_entry_path = '_.csv'
     
     def __init__(self):
-        print(''' Usage: Export the datatrack hydromassage log as a CSV to the same location as this file (probably the desktop).
+        print('''Usage: Export the datatrack hydromassage log as a CSV to the same location as this file (probably the desktop).
         Then, run this file! The hydromassage should automatically be populated with entries!\n''')
         
         print("Now reading the HydroMassage database from %s, and the new entry HydroMassage Log from %s\n" % (self.database_path, self.new_entry_path))
